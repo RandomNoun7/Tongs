@@ -1,11 +1,15 @@
-configuration: Release
+environment:
+  PSGalleryKey:
+    secure: PnXPcVJqKA84pb+5SE15noCZ3neiHmrJgsvLJeyIkbIHW4rQwJ5vYK7U6T3th8iv
 
-install:
-  - cinst pester
+configuration: Release
 
 build: false
 
+before_test:
+  - ps: Install-Module Pester
+  - ps: Install-Module Psake
+
 test_script:
-  - ps: $res = Invoke-Pester -OutputFormat NUnitXml -OutputFile TestsResults.xml -PassThru
-  - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestsResults.xml))
-  - ps: if ($res.FailedCount -gt 0) { throw "$($res.FailedCount) tests failed."}
+  - ps: Invoke-PSake
+  - ps: if($psake.build_success -eq $false){throw 'build failed.'}
