@@ -1,0 +1,1 @@
+invoke-psake -buildFile ..\..\psakefile.ps1 -taskList refresh

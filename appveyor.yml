@@ -1,0 +1,18 @@
+environment:
+  PSGalleryKey:
+    secure: PnXPcVJqKA84pb+5SE15noCZ3neiHmrJgsvLJeyIkbIHW4rQwJ5vYK7U6T3th8iv
+
+configuration: Release
+
+build: false
+
+before_test:
+  - ps: |
+      $metadata = Get-Content .\metadata.json -Raw | ConvertFrom-Json
+      $metadata.requiredModules | Out-String
+      Install-Module $metadata.RequiredModules
+
+test_script:
+  - ps: Import-Module Pester, PSScriptAnalyzer
+  - ps: Invoke-PSake
+  - ps: if($psake.build_success -eq $false){throw 'build failed.'}
