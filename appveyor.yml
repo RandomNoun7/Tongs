@@ -7,8 +7,10 @@ configuration: Release
 build: false
 
 before_test:
-  - ps: Install-Module Pester
-  - ps: Install-Module Psake
+  - ps: |
+      $metadata = Get-Content .\metadata.json -Raw | ConvertFrom-Json
+      $metadata.requiredModules | Out-String
+      Install-Module $metadata.RequiredModules
 
 test_script:
   - ps: Invoke-PSake

@@ -1,0 +1,1 @@
+Import-Module $PSScriptRoot\..\puppet_testing_powershell

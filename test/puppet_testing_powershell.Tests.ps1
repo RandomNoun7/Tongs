@@ -1,5 +1,5 @@
 $ModuleManifestName = 'puppet_testing_powershell.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\module\$ModuleManifestName"
+$ModuleManifestPath = "$PSScriptRoot\..\module\puppet_testing_powershell\$ModuleManifestName"
 
 Describe 'Module Manifest Tests' {
     It 'Passes Test-ModuleManifest' {
