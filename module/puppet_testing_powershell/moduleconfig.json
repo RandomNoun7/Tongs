@@ -64,8 +64,20 @@
       "description": "Type of puppet install, Puppet enterprise master, or agents on nodes only. If testing a master agent scenario override this default to 'pe'."
     }
   ],
+  "env_override_sets": [
+    {
+      "name": "DSC_Lite",
+      "values": [
+        {
+          "name": "BEAKER_PUPPET_AGENT_VERSION",
+          "value": "1.9.10"
+        }
+      ]
+    }
+  ],
   "host-generator-strings": {
     "default_hypervisor": "vmpooler",
+    "default_string": "agent-only",
     "vmpooler": {
       "strings": [
         {
