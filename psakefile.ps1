@@ -1,4 +1,4 @@
-task default -Depends test
+task default -depends writeModule, modifyModulePath, test
 task refresh -depends writeModule, modifyModulePath, ImportModule
 
 $moduleName = 'puppet_testing_powershell'
@@ -19,7 +19,19 @@ task scriptAnalyzer {
     Add-AppveyorTest -Name "PSScriptAnalyzer" -Outcome Running
   }
 
-  $results = Invoke-ScriptAnalyzer -Path $pwd -Recurse -Severity Warning -ErrorAction SilentlyContinue
+  # Analyze module source files and test files, but not the built module.
+  $pathsToTest = @(
+    "$PSScriptRoot\module"
+    "$PSScriptRoot\test\acceptance"
+    "$PSScriptRoot\test\unit"
+    "$PSScriptRoot\test\*.ps1"
+  )
+
+  foreach ($path in $pathsToTest) {
+    if(Test-Path $path){
+      $results += Invoke-ScriptAnalyzer -Path $path -Recurse -Severity Warning -ErrorAction SilentlyContinue
+    }
+  }
 
   if($results) {
     $resultString = $results | Out-String
@@ -41,18 +53,14 @@ task writeModule {
   if(-not (Test-Path "$PSScriptRoot\test\module\$modulename\")) {
     New-Item "$PSScriptRoot\test\module\$modulename\" -ItemType Directory
   }
-  Copy-Item -Path "$PSScriptRoot\module\$moduleName\$moduleName.psm1" -Destination "$PSScriptRoot\test\module\$modulename\$modulename.psm1" -force
+  Copy-Item -Path "$PSScriptRoot\module\$moduleName\$moduleName.ps*1" -Destination "$PSScriptRoot\test\module\$modulename\" -force
 
   $paths = @("$PSScriptRoot\module\$moduleName\private","$PSScriptRoot\module\$moduleName\public")
 
-  $privateContent = Get-ChildItem -Path $paths[0] -Recurse `
-                    | Get-Content
+  $content = Get-ChildItem -Path $paths -Recurse `
+             | Get-Content
 
-  $publicContent = Get-ChildItem -Path $paths[1] -Recurse `
-                   | Get-Content
-
-  Set-Content -Path "$PSScriptRoot\test\module\$modulename\$moduleName.psm1" -Value $privateContent
-  Add-Content -Path "$PSScriptRoot\test\module\$modulename\$moduleName.psm1" -Value $publicContent
+  Set-Content -Path "$PSScriptRoot\test\module\$modulename\$moduleName.psm1" -Value $content
 
 }
 
