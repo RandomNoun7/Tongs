@@ -1,5 +1,5 @@
 task default -depends writeModule, modifyModulePath, test
-task refresh -depends writeModule, modifyModulePath, ImportModule
+task refresh -depends writeModule, modifyModulePath
 
 $moduleName = 'puppet_testing_powershell'
 
@@ -54,6 +54,7 @@ task writeModule {
     New-Item "$PSScriptRoot\test\module\$modulename\" -ItemType Directory
   }
   Copy-Item -Path "$PSScriptRoot\module\$moduleName\$moduleName.ps*1" -Destination "$PSScriptRoot\test\module\$modulename\" -force
+  Copy-Item -Path "$PSScriptRoot\module\$modulename\moduleconfig.json" -Destination "$PSScriptRoot\test\module\$modulename" -Force
 
   $paths = @("$PSScriptRoot\module\$moduleName\private","$PSScriptRoot\module\$moduleName\public")
 
@@ -73,8 +74,4 @@ task modifyModulePath {
   }
 
   $env:PSModulePath = $pathComponents -join ';'
-}
-
-task ImportModule {
-  Import-Module $moduleName -force
 }
