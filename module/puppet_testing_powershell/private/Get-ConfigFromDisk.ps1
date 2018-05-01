@@ -5,12 +5,12 @@ function Get-ConfigFromDisk {
   )
 
   begin {
-    if (Get-Command git) {
-      $baseDir = git rev-parse --show-toplevel
+    try {
+      $baseDir = Get-RepoTopLevel
     }
-    else {
-      Write-Error 'git not found.'
-      return
+    catch {
+      throw 'git not found'
+      return $NULL
     }
   }
 
