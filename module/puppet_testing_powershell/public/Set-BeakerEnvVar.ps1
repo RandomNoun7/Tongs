@@ -56,38 +56,24 @@ function Set-BeakerEnvVar {
     $userDefined
   )
 
-  $defaults = Get-Content "$PSScriptRoot\..\moduleconfig.json" `
-              | Out-String `
-              | ConvertFrom-JSON
+  $vars = Get-ConfigFromDisk
 
-  $finalVars = @{}
-
-  foreach($configVar in $defaults.env) {
-    $finalVars[$configVar.name] = (Get-Variable $configVar.name -ErrorAction SilentlyContinue).value, $configVar.value `
-                                  | Where-object -FilterScript {-not [string]::IsNullOrEmpty($_)} `
-                                  | Select-Object -first 1
+  foreach($var in $vars.env) {
+    if($userValue = Get-UserValue -name $var.name) {
+      Write-Verbose ("Set-BeakerEnvVar: Found user override: {0} with value: {1}" -f $var.name, $userValue)
+      $vars.env[$var.name] = $userValue
+    }
   }
 
   foreach($key in $userDefined.keys) {
-    $finalVars[$key] = $userDefined[$key]
+    $vars.env | Add-Member -MemberType NoteProperty -Name $key -Value $userDefined[$key]
   }
 
-  if($finalVars['BEAKER_TESTMODE'] -eq 'apply') {
-    $finalVars['PUPPET_INSTALL_TYPE'] = 'agent'
-    $finalVars['BEAKER_PUPPET_COLLECTION']='puppet'
-  } else {
-    $finalVars['PUPPET_INSTALL_TYPE'] = 'pe'
-  }
+  Write-Verbose ($vars.env | Out-String)
 
-  if($BEAKER_debug -eq 'no') {
-    $finalVars.Remove('BEAKER_debug')
-  }
-
-  Write-Verbose ($finalVars | Out-String)
-
-  foreach($key in $finalVars.Keys) {
-    $path = Join-Path -Path env:\ -ChildPath $key
-    $value = $finalVars[$key]
+  foreach($var in $vars.env) {
+    $path = Join-Path -Path env:\ -ChildPath $var.name
+    $value = $var.value
     Write-Verbose "Setting: $path to: $value"
     New-Item -Path $path -Value $value -force | Out-Null
   }
