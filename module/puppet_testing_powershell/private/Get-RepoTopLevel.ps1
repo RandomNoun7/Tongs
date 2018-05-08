@@ -8,7 +8,7 @@ function Get-RepoTopLevel {
   }
 
   process {
-    git rev-parse --show-toplevel
+    (Get-Item -path (git rev-parse --show-toplevel)).fullname
   }
 
   end {

@@ -51,12 +51,20 @@ function Set-BeakerEnvVar {
     [string]
     $PUPPET_INSTALL_VERSION,
 
+    # Take the name of a configured override set
+    [string]
+    $OverrideSet,
+
     # Define environment variables not accounted for in configuration in case you need them for additional helpers that like environment vars. Please pass in a hashtable of key value pairs.
     [hashtable]
     $userDefined
   )
 
   $vars = Get-ConfigFromDisk
+
+  if($OverrideSet -ne '') {
+    $vars = Select-OverrideSet -config $vars -OverrideSet $OverrideSet
+  }
 
   foreach($var in $vars.env) {
     if($userValue = Get-UserValue -name $var.name) {
@@ -74,7 +82,7 @@ function Set-BeakerEnvVar {
   foreach($var in $vars.env) {
     $path = Join-Path -Path env:\ -ChildPath $var.name
     $value = $var.value
-    Write-Verbose "Setting: $path to: $value"
+    Write-Verbose "Set-BeakerEnvVar: Setting: $path to: $value"
     New-Item -Path $path -Value $value -force | Out-Null
   }
 }

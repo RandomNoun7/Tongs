@@ -1,7 +1,7 @@
-function Invoke-RSpecTest {
+function Invoke-RakeTask {
   [cmdletbinding()]
   param(
-    [string[]]$Pattern,
+    [string[]]$TaskName,
     [switch]$SkipEnvVars,
     [string]$OverrideSet,
     [hashtable]$UserDefined,
@@ -46,7 +46,7 @@ function Invoke-RSpecTest {
   Set-VarsForHostsFile
   # Run test pattern
 
-  Invoke-BundleCommand -command "rspec $($Pattern -join ' ')"
+  Invoke-BundleCommand -command "rake $TaskName"
   # Delete env vars.
   $removeParams = @{
     verbose = $VerbosePreference

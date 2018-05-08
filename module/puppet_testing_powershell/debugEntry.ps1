@@ -1,1 +1,1 @@
-Import-Module $PSScriptRoot\..\puppet_testing_powershell
+invoke-psake -buildFile ..\..\psakefile.ps1 -taskList refresh

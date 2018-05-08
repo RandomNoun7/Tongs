@@ -27,9 +27,11 @@ task scriptAnalyzer {
     "$PSScriptRoot\test\*.ps1"
   )
 
+  $results = @()
+
   foreach ($path in $pathsToTest) {
     if(Test-Path $path){
-      $results += Invoke-ScriptAnalyzer -Path $path -Recurse -Severity Warning -ErrorAction SilentlyContinue
+      $results += Invoke-ScriptAnalyzer -Path $path -Recurse -ErrorAction SilentlyContinue
     }
   }
 
@@ -40,8 +42,6 @@ task scriptAnalyzer {
       Add-AppveyorMessage -Message "PSScriptAnalyzer found one or more errors."
       Update-AppveyorTest -Name 'PSScriptAnalyzer' -Outcome Failed -ErrorMessage $resultString
     }
-
-    throw 'Script Analysis Failed'
   } else {
     if($env:APPVEYOR_JOB_ID){
       Update-AppveyorTest -Name 'PSScriptAnalyzer' -Outcome Passed
@@ -66,11 +66,11 @@ task writeModule {
 }
 
 task modifyModulePath {
-  $testModulePath = (Get-Item ".\test\module").FullName
+  $testModulePath = (Get-Item "$psscriptroot\test\module").FullName
   $pathComponents = $env:PSModulePath -split ';'
 
   if(-not ($pathComponents -eq $testModulePath)){
-    $pathComponents += $testModulePath
+    $pathComponents = ([array]$testModulePath + $pathComponents)
   }
 
   $env:PSModulePath = $pathComponents -join ';'
