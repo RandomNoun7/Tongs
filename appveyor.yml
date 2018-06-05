@@ -13,5 +13,6 @@ before_test:
       Install-Module $metadata.RequiredModules
 
 test_script:
+  - ps: Import-Module Pester, PSScriptAnalyzer
   - ps: Invoke-PSake
   - ps: if($psake.build_success -eq $false){throw 'build failed.'}

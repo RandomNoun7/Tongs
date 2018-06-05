@@ -8,6 +8,8 @@ function Invoke-BundleCommand {
     $command
   )
 
+  $command = "bundle exec $command"
+  Write-Verbose "Invoke-BundleCommand: $command"
   Invoke-Expression -Command $command
 
   <#

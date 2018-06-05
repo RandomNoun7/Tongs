@@ -73,35 +73,45 @@
           "value": "1.9.10"
         }
       ]
+    },
+    {
+      "name": "IIS",
+      "delete_values": [
+        "BEAKER_PE_VER"
+      ]
     }
   ],
-  "host-generator-strings": {
+  "host_generator_strings": {
     "default_hypervisor": "vmpooler",
     "default_string": "agent-only",
-    "vmpooler": {
-      "strings": [
-        {
-          "name": "master-agent",
-          "value": "windows2012-64default.a-redhat7-64mdca"
-        },
-        {
-          "name": "agent-only",
-          "value": "windows-2012r2-64default.a"
-        }
-      ]
-    },
-    "vagrant": {
-      "strings": [
-        {
-          "name": "master-agent",
-          "value": "'windows2012-64default.a{box=win2012_wmf5_gui,ip=172.28.128.3}-centos7-64mdca{box=puppetlabs/centos-7.0-64-nocm,box_url=https://app.vagrantup.com/puppetlabs/boxes/centos-7.0-64-nocm,ip=172.28.128.4}'"
-        },
-        {
-          "name": "agent-only",
-          "value": "'windows2012-64default.a{box=win_2012_wmf5_gui,ip=172.28.128.3}'"
-        }
-      ],
-      "global-config": "'{ssh={username=vagrant,password=vagrant,auth_methods=[\"password\"]}}'"
-    }
+    "hypervisors": [
+      {
+        "name": "vmpooler",
+        "strings": [
+          {
+            "name": "master-agent",
+            "value": "windows2012-64default.a-redhat7-64mdca"
+          },
+          {
+            "name": "agent-only",
+            "value": "windows2012-64default.a"
+          }
+        ]
+      },
+      {
+        "name": "vagrant",
+        "strings": [
+          {
+            "name": "master-agent",
+            "value": "'windows2012-64default.a{box=win2012_wmf5_gui,ip=172.28.128.3}-centos7-64mdca{box=puppetlabs/centos-7.0-64-nocm,box_url=https://app.vagrantup.com/puppetlabs/boxes/centos-7.0-64-nocm,ip=172.28.128.4}'"
+          },
+          {
+            "name": "agent-only",
+            "value": "'windows2012-64default.a{box=win_2012_wmf5_gui,ip=172.28.128.3}'"
+          }
+        ]
+      }
+    ],
+    "global_config": "'{ssh={username=vagrant,password=vagrant,auth_methods=[\"password\"]}}'"
   }
 }

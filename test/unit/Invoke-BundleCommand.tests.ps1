@@ -3,7 +3,7 @@
 Describe 'Invoke-BundleCommand' {
   Mock Invoke-Expression
 
-  $cmdString = 'bundle exec rake acceptance_tests'
+  $cmdString = 'rake acceptance_tests'
 
   Invoke-BundleCommand -command $cmdString
 
@@ -12,6 +12,6 @@ Describe 'Invoke-BundleCommand' {
   }
 
   it 'Should have called Invoke-Expression with the correct command' {
-    Assert-MockCalled -CommandName Invoke-Expression -ParameterFilter {$command -eq $cmdString}
+    Assert-MockCalled -CommandName Invoke-Expression -ParameterFilter {$command -eq "bundle exec $cmdString"}
   }
 }
