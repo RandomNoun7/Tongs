@@ -1,5 +1,6 @@
 function Set-VarsForHostsFile {
   [cmdletbinding()]
+  [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions','',Justification='Not changing state of system. Only removing environment vars as part of cleanup.')]
   param(
   )
 

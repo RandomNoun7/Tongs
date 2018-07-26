@@ -1,4 +1,4 @@
-function Invoke-RSpecTest {
+function Invoke-RSpec {
   [cmdletbinding()]
   param(
     [string[]]$Pattern,
