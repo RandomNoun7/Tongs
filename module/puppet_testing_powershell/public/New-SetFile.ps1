@@ -49,7 +49,8 @@ function New-SetFile {
   try{
     Push-Location (Get-RepoTopLevel)
     $content = Invoke-BundleCommand -command "beaker-hostgenerator $string" -Verbose:$VerbosePreference
-    Write-Verbose "New-SetFile: Content returned: $content"
+    Write-Verbose "New-SetFile: Content returned:"
+    Write-Verbose ($content -join [Environment]::NewLine)
     Pop-Location
     Set-Content -Path $outpath -Value $content -Encoding ASCII -Verbose:$VerbosePreference
   }
