@@ -75,3 +75,15 @@ task modifyModulePath {
 
   $env:PSModulePath = $pathComponents -join ';'
 }
+
+task deploy -depends writeModule {
+  if($env:APPVEYOR_REPO_BRANCH -eq 'release' -and $env:APPVEYOR_REPO_TAG){
+    $dataPath = "$PSScriptRoot\test\module\$modulename\$moduleName.psd1"
+    $version = (Import-PowerShellDataFile -Path $dataPath).ModuleVersion
+    if($version -ne $env:APPVEYOR_REPO_TAG_NAME){
+      throw ("Data File version -ne tag version: $version : $env:APPVEYOR_REPO_TAG_NAME")
+    } else {
+      Invoke-PSDeploy -Path .
+    }
+  }
+}
