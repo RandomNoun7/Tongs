@@ -39,9 +39,10 @@ function Invoke-RakeTask {
     if($ForceCreateHosts) {
       $hostsParams['force'] = $true
     }
-
-    New-SetFile @hostsParams
   }
+
+  New-SetFile @hostsParams
+
   # Parse for master or agent only and set vars to match
   Set-VarsForHostsFile
   # Run test pattern
