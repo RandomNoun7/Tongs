@@ -45,13 +45,14 @@ function Merge-Config {
   }
 
   # Merge default hypervisor and string
-
-  if ($default_hypervisor = $child.host_generator_strings.default_hypervisor) {
+  $default_hypervisor = $child.host_generator_strings.default_hypervisor
+  if ( [string]::IsNullOrEmpty($default_hypervisor)) {
     Write-Verbose ("Merge-Config: Found new default_hypervisor {0} in repo scoped file" -f $default_hypervisor)
     $base.host_generator_strings.default_hypervisor = $default_hypervisor
   }
 
-  if ($default_string = $child.host_generator_strings.default_string) {
+  $default_string = $child.host_generator_strings.default_string
+  if ([string]::IsNullOrEmpty($default_string)) {
     Write-Verbose ("Merge-Config: Found new default_string {0} in repo scoped file" -f $default_string)
     $base.host_generator_strings.default_string = $default_string
   }
@@ -81,7 +82,8 @@ function Merge-Config {
 
   # Merge global config
 
-  if ($global_config = $child.host_generator_strings.global_config) {
+  $global_config = $child.host_generator_strings.global_config
+  if ([string]::IsNullOrEmpty($global_config)) {
     $base.host_generator_strings.global_config = $global_config
   }
 
