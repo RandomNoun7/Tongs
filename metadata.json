@@ -1,3 +1,0 @@
-{
-  "RequiredModules": ["Pester", "PSake", "PSScriptAnalyzer"]
-}
