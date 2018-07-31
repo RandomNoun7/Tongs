@@ -1,7 +1,7 @@
 task default -depends writeModule, modifyModulePath, test
 task refresh -depends writeModule, modifyModulePath
 
-$moduleName = 'puppet_testing_powershell'
+$moduleName = 'Tongs'
 
 task test -depends scriptAnalyzer {
   $res = Invoke-Pester -OutputFormat NUnitXml -OutputFile TestsResults.xml -PassThru

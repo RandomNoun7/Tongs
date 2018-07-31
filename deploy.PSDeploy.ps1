@@ -1,6 +1,6 @@
 Deploy Module {
   By PSGalleryModule {
-    FromSource .\test\module\puppet_testing_powershell
+    FromSource .\test\module\Tongs
     To PSGallery
     WithOptions @{
       ApiKey = $ENV:PSGalleryKey
