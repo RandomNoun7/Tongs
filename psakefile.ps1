@@ -1,7 +1,7 @@
 task default -depends writeModule, modifyModulePath, test
 task refresh -depends writeModule, modifyModulePath
 
-$moduleName = 'puppet_testing_powershell'
+$moduleName = 'Tongs'
 
 task test -depends scriptAnalyzer {
   $res = Invoke-Pester -OutputFormat NUnitXml -OutputFile TestsResults.xml -PassThru
@@ -83,7 +83,7 @@ task deploy -depends writeModule {
     if($version -ne $env:APPVEYOR_REPO_TAG_NAME){
       throw ("Data File version -ne tag version: $version : $env:APPVEYOR_REPO_TAG_NAME")
     } else {
-      Invoke-PSDeploy -Path .
+      Invoke-PSDeploy -Path . -force
     }
   }
 }
